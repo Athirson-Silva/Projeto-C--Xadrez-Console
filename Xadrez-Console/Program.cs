@@ -1,4 +1,6 @@
 ﻿using System;
+using tabuleiro;
+using xadrez;
 
 namespace Xadrez_Console
 {
@@ -6,7 +8,19 @@ namespace Xadrez_Console
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            try
+            {
+                PartidaDeXadrez partida = new PartidaDeXadrez();
+
+                Tela.imprimirTabuileiro(partida.Tab);
+            }
+            catch(TabuleiroException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Console.ReadLine();
+
         }
     }
 }

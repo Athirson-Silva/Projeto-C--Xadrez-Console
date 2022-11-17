@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace tabuleiro
+﻿namespace tabuleiro
 {
     internal class Tabuleiro
     {
@@ -38,9 +32,9 @@ namespace tabuleiro
 
         public void colocarPeca(Peca p, Posicao pos)
         {
-            if(jaExistePeca(pos))
+            if (jaExistePeca(pos))
             {
-                throw new TabuleiroException("Já existe uma peça aqui mano");
+                throw new TabuleiroException("Já existe uma peça aqui mano, se liga hein");
             }
 
             Pecas[pos.Linha, pos.Coluna] = p;
@@ -49,7 +43,8 @@ namespace tabuleiro
 
         public Peca retirarPeca(Posicao pos)
         {
-            if(peca(pos) == null){
+            if (peca(pos) == null)
+            {
                 return null;
             }
             Peca aux = peca(pos);

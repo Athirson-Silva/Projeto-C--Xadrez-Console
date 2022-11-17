@@ -16,7 +16,7 @@ namespace xadrez
 
         public Posicao toPosicao()
         {
-            return new Posicao(8 - Linha, Coluna - 'a');
+            return new Posicao(8 - Linha, Coluna - 'a'); //Coluna - 'a' para converter o char para o número correspondente da posição
         }
 
         public override string ToString()

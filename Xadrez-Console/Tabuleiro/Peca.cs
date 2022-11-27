@@ -1,6 +1,6 @@
 ﻿namespace tabuleiro
 {
-    internal class Peca
+    internal abstract class Peca
     {
         public Tabuleiro Tabuleiro { get; protected set; }
         public Posicao Posicao { get; set; }
@@ -19,5 +19,7 @@
         {
             QteMovimentos++;
         }
+
+        public abstract bool[,] movimentosPossiveis();
     }
 }

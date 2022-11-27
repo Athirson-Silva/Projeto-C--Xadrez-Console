@@ -6,6 +6,9 @@ namespace Xadrez_Console
 {
     internal class Tela
     {
+        ConsoleColor fundoOriginal = Console.BackgroundColor;
+        ConsoleColor fundoAlterado = ConsoleColor.DarkGray;
+
         public static void imprimirTabuleiro(Tabuleiro tab)
         {
             for (int i = 0; i < tab.Linhas; i++)
@@ -13,20 +16,30 @@ namespace Xadrez_Console
                 Console.Write(8 - i + " ");
                 for (int j = 0; j < tab.Colunas; j++)
                 {
-                    Peca peca = tab.peca(i, j);
-                    if (peca == null)
-                    {
-                        Console.Write("- ");
-                    }
-                    else
-                    {
-                        imprimirPeca(tab.peca(i, j));
-                        Console.Write(" ");
-                    }
+                    imprimirPeca(tab.peca(i, j));
                 }
                 Console.WriteLine();
             }
             Console.WriteLine("  a b c d e f g h");
+        }
+
+        public static void imprimirTabuleiro(Tabuleiro tab, bool[,] posicoesPossiveis)
+        {
+            ConsoleColor fundoOriginal = Console.BackgroundColor;
+            for (int linhas = 0; linhas < tab.Linhas; linhas++)
+            {
+                Console.Write(8 - linhas + " ");
+                for (int colunas = 0; colunas < tab.Colunas; colunas++)
+                {
+                    destacarPossivelMovimento(posicoesPossiveis, linhas, colunas);
+                    imprimirPeca(tab.peca(linhas, colunas));
+                    Console.BackgroundColor = fundoOriginal;
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine("  a b c d e f g h");
+
+            Console.BackgroundColor = fundoOriginal;
         }
 
         public static PosicaoXadrez lerPosicaoXadrez()
@@ -38,19 +51,42 @@ namespace Xadrez_Console
             return new PosicaoXadrez(coluna, linha);
         }
 
+        public static void destacarPossivelMovimento(bool[,] matPossiveisMovimentos, int linha, int coluna)
+        {
+            ConsoleColor fundoOriginal = Console.BackgroundColor;
+            ConsoleColor fundoAlterado = ConsoleColor.DarkGray;
+
+            if (matPossiveisMovimentos[linha, coluna])
+            {
+                Console.BackgroundColor = fundoAlterado;
+            }
+            else
+            {
+                Console.BackgroundColor = fundoOriginal;
+            }
+        }
+
         public static void imprimirPeca(Peca peca)
         {
+
+            if (peca == null)
+            {
+                Console.Write("- ");
+                return;
+            }
+
             if (peca.Cor == Cor.Branca)
             {
                 Console.Write(peca);
             }
             else
             {
-                ConsoleColor aux = Console.ForegroundColor; //Salva a cor do console
-                Console.ForegroundColor = ConsoleColor.Blue; //Altera a cor do console
-                Console.Write(peca); //Imprime com a nova cor
-                Console.ForegroundColor = aux; //Retorna o console à cor original
+                ConsoleColor aux = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write(peca);
+                Console.ForegroundColor = aux;
             }
+            Console.Write(" ");
         }
     }
 }

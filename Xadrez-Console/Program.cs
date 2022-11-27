@@ -8,6 +8,7 @@ namespace Xadrez_Console
     {
         static void Main(string[] args)
         {
+            Console.Clear();
             try
             {
                 PartidaDeXadrez partida = new PartidaDeXadrez();
@@ -17,8 +18,15 @@ namespace Xadrez_Console
                     Console.Clear();
                     Tela.imprimirTabuleiro(partida.Tab);
 
+                    Console.WriteLine();
                     Console.Write("Origem: ");
                     Posicao origem = Tela.lerPosicaoXadrez().toPosicao();
+
+                    bool[,] posicoesPossiveis = partida.Tab.peca(origem).movimentosPossiveis();
+
+                    Console.Clear();
+                    Tela.imprimirTabuleiro(partida.Tab, posicoesPossiveis);
+
                     Console.Write("Destino: ");
                     Posicao destino = Tela.lerPosicaoXadrez().toPosicao();
 

@@ -8,6 +8,7 @@ namespace Xadrez_Console
     {
         static void Main(string[] args)
         {
+            Console.BackgroundColor = ConsoleColor.Black;
             Console.Clear();
             try
             {
@@ -18,10 +19,7 @@ namespace Xadrez_Console
                     try
                     {
                         Console.Clear();
-                        Tela.imprimirTabuleiro(partida.Tab);
-                        Console.WriteLine();
-                        Console.WriteLine("Turno: " + partida.Turno);
-                        Console.WriteLine("Aguardando peças " + partida.JogadorAtual + "s...");
+                        Tela.imprimirPartida(partida);
 
                         Console.WriteLine();
                         Console.Write("Origem: ");

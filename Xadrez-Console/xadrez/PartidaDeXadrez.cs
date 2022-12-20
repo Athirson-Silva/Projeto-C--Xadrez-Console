@@ -11,6 +11,7 @@ namespace xadrez
         public bool Terminada { get; private set; }
         private HashSet<Peca> Pecas;
         private HashSet<Peca> Capturadas;
+        public bool Xeque { get; private set; }
         public PartidaDeXadrez()
         {
             Tab = new Tabuleiro(8, 8);
@@ -23,7 +24,7 @@ namespace xadrez
             colocarPecas();
         }
 
-        public void executaMovimento(Posicao origem, Posicao destino)
+        public Peca executaMovimento(Posicao origem, Posicao destino)
         {
             Peca p = Tab.retirarPeca(origem);
             p.incrementarQteMovimentos();
@@ -33,13 +34,53 @@ namespace xadrez
             {
                 Capturadas.Add(pecaCapturada);
             }
+
+            return pecaCapturada;
+        }
+
+        public void desfazMovimento(Posicao origem, Posicao destino, Peca pecaCapturada)
+        {
+            Peca p = Tab.retirarPeca(destino);
+            p.decrementarQteMovimentos();
+
+            if (pecaCapturada != null)
+            {
+                Tab.colocarPeca(pecaCapturada, destino);
+                Capturadas.Remove(pecaCapturada);
+            }
+
+            Tab.colocarPeca(p, origem);
         }
 
         public void realizaJogada(Posicao origem, Posicao destino)
         {
-            executaMovimento(origem, destino);
-            Turno++;
-            mudaJogador();
+            Peca pecaCapturada = executaMovimento(origem, destino);
+            if (estaEmXeque(JogadorAtual))
+            {
+                desfazMovimento(origem, destino, pecaCapturada);
+                throw new TabuleiroException("Você não pode se colocar em xeque, bocó!");
+            }
+
+            if (estaEmXeque(adversaria(JogadorAtual)))
+            {
+                Xeque = true;
+            }
+            else
+            {
+                Xeque = false;
+            }
+
+            if (testeXequemate(adversaria(JogadorAtual)))
+            {
+                Terminada = true;
+            }
+            else
+            {
+                Turno++;
+                mudaJogador();
+            }
+
+            //Aula 182
         }
 
         public void validarPosicaoOrigem(Posicao pos)
@@ -97,7 +138,7 @@ namespace xadrez
         {
             HashSet<Peca> aux = new HashSet<Peca>();
 
-            foreach (Peca peca in Capturadas)
+            foreach (Peca peca in Pecas)
             {
                 if (peca.Cor == cor)
                 {
@@ -110,11 +151,78 @@ namespace xadrez
             return aux;
         }
 
-
         public void colocarNovaPeca(char coluna, int linha, Peca peca)
         {
             Tab.colocarPeca(peca, new PosicaoXadrez(coluna, linha).toPosicao());
             Pecas.Add(peca);
+        }
+
+        private Cor adversaria(Cor cor)
+        {
+            return cor == Cor.Branca ? Cor.Preta : Cor.Branca;
+        }
+
+        private Peca rei(Cor cor)
+        {
+            foreach (Peca peca in pecasEmJogo(cor))
+            {
+                if (peca is Rei) //Is é um operador de tipo que verifica se a variavel é uma instância de uma subclasse
+                {
+                    return peca;
+                }
+            }
+
+            return null;
+        }
+
+        public bool estaEmXeque(Cor cor)
+        {
+            Peca reizinho = rei(cor);
+            if (reizinho == null)
+            {
+                throw new TabuleiroException($"Não existe rei da cor {cor} no tabuleiro (???)");
+            }
+
+            foreach (Peca peca in pecasEmJogo(adversaria(cor)))
+            {
+                bool[,] mat = peca.movimentosPossiveis();
+                if (mat[reizinho.Posicao.Linha, reizinho.Posicao.Coluna] == true)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool testeXequemate(Cor cor)
+        {
+            if (estaEmXeque(cor) == false) return false;
+
+            foreach (Peca peca in pecasEmJogo(cor))
+            {
+                bool[,] mat = peca.movimentosPossiveis();
+
+                for (int i = 0; i < Tab.Linhas; i++)
+                {
+                    for (int j = 0; j < Tab.Colunas; j++)
+                    {
+                        if (mat[i, j] == true)
+                        {
+                            //Verifica se algum movimento possível sai de Xeque
+                            Posicao origem = peca.Posicao;
+                            Posicao destino = new Posicao(i, j);
+                            Peca pecaCapturada = executaMovimento(origem, destino);
+                            bool testeXeque = estaEmXeque(cor);
+                            desfazMovimento(origem, destino, pecaCapturada);
+
+                            if (testeXeque == false) return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
         }
 
         private void colocarPecas()

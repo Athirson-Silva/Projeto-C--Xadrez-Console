@@ -13,6 +13,7 @@ namespace Xadrez_Console
 
         public static void imprimirPartida(PartidaDeXadrez partida)
         {
+            Console.Clear();
             imprimirTabuleiro(partida.Tab);
             Console.WriteLine();
             imprimirPecasCapturadas(partida);
@@ -22,6 +23,7 @@ namespace Xadrez_Console
 
         public static void imprimirPecasCapturadas(PartidaDeXadrez partida)
         {
+            Console.Clear();
             Console.WriteLine("Peças capturadas:");
             Console.Write("Brancas: ");
             imprimirConjunto(partida.pecasCapturadas(Cor.Branca));

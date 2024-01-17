@@ -8,7 +8,7 @@ namespace Xadrez_Console
     internal class Tela
     {
         public static ConsoleColor CorBranca = ConsoleColor.White;
-        public static ConsoleColor CorCinza = ConsoleColor.Gray;
+        public static ConsoleColor CorCinza = ConsoleColor.DarkGray;
         public static ConsoleColor CorPreta = ConsoleColor.Black;
         public static ConsoleColor CorDestaque = ConsoleColor.Blue;
 

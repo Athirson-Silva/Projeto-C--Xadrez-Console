@@ -178,9 +178,9 @@ namespace xadrez
             }
 
             // #jogadaespecial en passant
-            if (pecaCapturada is Peao && (destino.Linha == origem.Linha - 2 || destino.Linha == origem.Linha + 2))
+            if (p is Peao && (destino.Linha == origem.Linha - 2 || destino.Linha == origem.Linha + 2))
             {
-                vulneravelEnPassant = pecaCapturada;
+                vulneravelEnPassant = p;
             }
             else
             {

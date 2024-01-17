@@ -9,7 +9,6 @@ namespace Xadrez_Console
         static void Main(string[] args)
         {
             Console.BackgroundColor = ConsoleColor.Black;
-            Console.Clear();
             try
             {
                 PartidaDeXadrez partida = new PartidaDeXadrez();
@@ -45,6 +44,8 @@ namespace Xadrez_Console
                         Console.ReadLine();
                     }
                 }
+                Console.Clear();
+                Tela.imprimirPartida(partida);
             }
             catch (TabuleiroException e)
             {

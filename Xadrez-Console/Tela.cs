@@ -8,6 +8,7 @@ namespace Xadrez_Console
     internal class Tela
     {
         public static ConsoleColor CorBranca = ConsoleColor.White;
+        public static ConsoleColor CorCinza = ConsoleColor.Gray;
         public static ConsoleColor CorPreta = ConsoleColor.Black;
         public static ConsoleColor CorDestaque = ConsoleColor.Blue;
 
@@ -18,12 +19,26 @@ namespace Xadrez_Console
             Console.WriteLine();
             imprimirPecasCapturadas(partida);
             Console.WriteLine($"Turno: {partida.Turno}");
-            Console.WriteLine($"Aguardando peças {partida.JogadorAtual}s...");
+
+            if(partida.Terminada == false)
+            {
+                Console.WriteLine($"Aguardando peças {partida.JogadorAtual}s...");
+
+                if(partida.Xeque)
+                {
+                    Console.WriteLine("Xeque!");
+                }
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine("Xeque-mate!");
+                Console.WriteLine($"Vencedor: {partida.JogadorAtual}");
+            }
         }
 
         public static void imprimirPecasCapturadas(PartidaDeXadrez partida)
         {
-            Console.Clear();
             Console.WriteLine("Peças capturadas:");
             Console.Write("Brancas: ");
             imprimirConjunto(partida.pecasCapturadas(Cor.Branca));
@@ -92,7 +107,7 @@ namespace Xadrez_Console
         {
             if (matPossiveisMovimentos[linha, coluna])
             {
-                Console.BackgroundColor = CorBranca;
+                Console.BackgroundColor = CorCinza;
             }
             else
             {

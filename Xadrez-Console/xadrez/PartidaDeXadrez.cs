@@ -79,8 +79,6 @@ namespace xadrez
                 Turno++;
                 mudaJogador();
             }
-
-            //Aula 182
         }
 
         public void validarPosicaoOrigem(Posicao pos)
@@ -177,12 +175,7 @@ namespace xadrez
 
         public bool estaEmXeque(Cor cor)
         {
-            Peca reizinho = rei(cor);
-            if (reizinho == null)
-            {
-                throw new TabuleiroException($"Não existe rei da cor {cor} no tabuleiro (???)");
-            }
-
+            Peca reizinho = rei(cor) ?? throw new TabuleiroException($"Não existe rei da cor {cor} no tabuleiro (???)");
             foreach (Peca peca in pecasEmJogo(adversaria(cor)))
             {
                 bool[,] mat = peca.movimentosPossiveis();
@@ -191,7 +184,6 @@ namespace xadrez
                     return true;
                 }
             }
-
             return false;
         }
 
@@ -199,8 +191,8 @@ namespace xadrez
         {
             if (estaEmXeque(cor) == false) return false;
 
-            foreach (Peca peca in pecasEmJogo(cor))
-            {
+            foreach(Peca peca in pecasEmJogo(cor))
+            { 
                 bool[,] mat = peca.movimentosPossiveis();
 
                 for (int i = 0; i < Tab.Linhas; i++)
